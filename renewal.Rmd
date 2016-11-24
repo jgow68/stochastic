@@ -22,10 +22,27 @@ $$M(t) = \mathbb{E}(N_t)\ for\ t \in [0, \infty)\\ F^c = 1 - F$$
 Distribution of arrival times are convulution powers of $F$. 
 $$F_n = F^{*n}$$
 
+#### Renewal equations for M and F
+
 If $a: [0, \infty) \to \mathbb{R}$ is locally bounded and $u: [0, \infty) \to \mathbb{R}$, then the renewal equation for $u$ is 
 $$ u = a + u * F $$
 
-This brings us to the renewal equations for $M$ and $F$.
+This brings us to the renewal equations for $M$ and $F$. \
+
+Conditioning on time of the first arrival $X_1$ with two time period $[0,t], \ [t, \infty)$
+
+\begin{align}
+
+M(t) 
+&= \mathbb{P} (N_t) \\
+&= \int_0^\infty E(N_t \mid X_1 = s)\ dF(s) \\
+&= \int_0^t E(N_t \mid X_1 = s)\ dF(s) + \int_t^\infty E(N_t \mid X_1 = s)\ dF(s) \\
+&= \int_0^t [1 + M(t-s)] \ dF(s) + 0 \\
+&= F(t) + (M * F)(t) \\
+
+\end{align}
+
+Hence we get 
 $$ M = F + M * F $$
 $$ F = M - F * M $$
 
@@ -109,14 +126,14 @@ $F(x) = 1 - e^{-rx}$ for $x \in [0, \infty)$
 \begin{align}
           M(t)     &= F(t) + M * F(t) \\
                    &= 1 - e^{-rt} + \int_0^t M(t-s) r e^{-rs} ds \\
-(sub\ x = t-s)     &= 1 - e^{-rt} + r e^{-rt} \int_0^t M(x) e^{-rx} dx \\
+(sub\ x = t-s)     &= 1 - e^{-rt} + r e^{-rt} \int_0^t M(x) e^{rx} dx \\
 
-\frac{d(e^{rt}M(t))}{dt}  &= \frac{d(e^{rt} - 1 + r \int_0^t M(x) e^{-rx} dx)}{dt} \\
+\frac{d(e^{rt}M(t))}{dt}  &= \frac{d(e^{rt} - 1 + r \int_0^t M(x) e^{rx} dx)}{dt} \\
 
 \end{align}
 
-$$ M^{'}(t) = r $$
-$$ M(t) = rt $$
+$$ M^{'}(t) = r \ for t \geq 0 $$
+$$ M(t) = rt \ since M(0)=0 $$
 
 Laplace transform of F is $\Phi$ as follows:
 
@@ -133,7 +150,7 @@ Ff $x \in [0,t],\ y \in [0, \infty)$
 \begin{align}
 
 \mathbb{P} (C_t \ge x, R_t \ge y) 
-&= e^{-r (t + y)} + \int_0^{t - x} e^{-r(t + y  - s)} r ds \\
+&= e^{-r (t + y)} + \int_0^{t - x} e^{-r(t + y  - s)} \ r \ ds \\
 &= e^{-r x} e^{-r y} \\
 &= \mathbb{P} (C_t \geq x) \mathbb{P} (R_t \geq y) \\
 
