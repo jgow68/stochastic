@@ -1,0 +1,147 @@
+---
+title: "Renewal_eqn"
+author: "Lxy"
+date: "November 24, 2016"
+output: html_document
+header-includes: -\usepackage{bm}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Renewal Equations
+
+Ref: http://www.math.uah.edu/stat/renewal/Equations.html
+
+Renewal process with interarrival sequence $\mathbf{X} = (X_1, X_2, \ldots)$, arrival time sequence $\mathbf{T} = (T_0, T_1, \ldots)$ and counting process $\mathbf {N} = \{N_t: t \in [0, \infty)\}$
+
+Let $F$ denote the distribution function of the interarrival times and $M$ denote the renewal function.\
+$$M(t) = \mathbb{E}(N_t)\ for\ t \in [0, \infty)\\ F^c = 1 - F$$
+
+Distribution of arrival times are convulution powers of $F$. 
+$$F_n = F^{*n}$$
+
+If $a: [0, \infty) \to \mathbb{R}$ is locally bounded and $u: [0, \infty) \to \mathbb{R}$, then the renewal equation for $u$ is 
+$$ u = a + u * F $$
+
+This brings us to the renewal equations for $M$ and $F$.
+$$ M = F + M * F $$
+$$ F = M - F * M $$
+
+Note: $M = \sum_{n=1}^{\infty} F_n$
+
+Laplace transform of $F$ and $M$ are $\Phi$ and $\Gamma$ with following relationship.
+$$ \Gamma = \frac{\Phi}{1 - \Phi}, \quad \Phi = \frac{\Gamma}{\Gamma + 1} $$
+
+Note: Laplace transform of function $f$ is $\phi (s) = \int_0^\infty \exp^{-st} f(t) \ dt$
+
+with the same conditions as above, $a: [0, \infty) \to \mathbb{R}$ then the uniquely locally bounded solution to the renewal equation $u = a + u * F$ is
+$$ u = a + a * M $$
+
+## Distribution of the age variables
+Let a deterministic time $t \in [0, \infty)$ falls in random renewal interval $[\,\mathbf{T_{N_t}}, \mathbf{T_{N_{t+1}}}]\,$ then\
+
+1. Current life at time $t$ is $C_t = t - T_{N_t}$\
+2. Remaining life at time $t$ is $R_t = T_{N_t + 1} - t$\
+3. Total life at time $t$ is $L_t = T_{N_t + 1} - T_{N_t}$\
+
+
+#### Remaining life
+
+$$ r_y (t) = \mathbb{P}(R_t > y) = \mathbb{P}(N(t, t + y] = 0)) $$
+
+By conditioning on the first arrival time, we get
+
+$$ \mathbb{P}(R_t > y) = \int_0^\infty \mathbb{P}(R_t > y \mid X_1 = s) \ dF(s) $$
+
+Consider 3 three time intervals $s \in [0,t],\ [t, t+y],\ [t+y, \infty]$,\
+\
+
+For $s \in [0, t],\ \mathbb{P} (R_t > y \mid X_1 = s) = \mathbb{P} (R_{t-s} > y)$
+
+For $s \in [t, t+y],\ \mathbb{P} (R_t > y \mid X_1 = s) = 0$
+
+For $s \in [t+y, \infty],\ \mathbb{P} (R_t > y \mid X_1 = s) = 1$
+
+Then we have
+
+\begin{align}
+
+\mathbb{P}(R_t > y) &= \int_0^t \mathbb{P} (R_{t-s} >y) \ dF(s) + 
+                       \int_t^{t+y} 0 \ dF(s) + 
+                       \int_{t+y}^\infty 1 \ dF(s) \\
+
+                    &= (r_y * F) (t) + 0 + F^c (t + y)
+
+\end{align}
+
+Note: $(f*G)(t) = \int_0^t f(t-s) \ dG(s), t \in [0, \infty)$ for locally bounded $f$ and $G$ is a distribution function.
+
+#### Current life
+
+for $t \in [0, \infty]$ and $x \in [0, t]$,
+
+\begin{align}
+
+\mathbb{P} (C_t \geq x) &= F^c (t) + \int_0^{t-x} F^c (t-s) \ dM(s) \\
+                        &= \mathbb{P} (R_{t-x} > x)
+                        
+\end{align}
+
+#### Joint distribution of current and remaining lives
+
+for $t \in [0, \infty]$ and $x \in [0, t]$ and $y \in [0, \infty]$,
+
+\begin{align}
+
+\mathbb{P} (C_t \geq x, R_t > y) &= \mathbb{P} (R_{t-x} > x + y) \\ 
+                                 &= F^c (t+y) + \int_0^{t-x} F^c (t+y-s) \ dM(s)
+                                 
+\end{align}
+
+## Examples and Special Cases
+
+#### Poisson distributed interarrivals
+
+$F(x) = 1 - e^{-rx}$ for $x \in [0, \infty)$
+
+\begin{align}
+          M(t)     &= F(t) + M * F(t) \\
+                   &= 1 - e^{-rt} + \int_0^t M(t-s) r e^{-rs} ds \\
+(sub\ x = t-s)     &= 1 - e^{-rt} + r e^{-rt} \int_0^t M(x) e^{-rx} dx \\
+
+\frac{d(e^{rt}M(t))}{dt}  &= \frac{d(e^{rt} - 1 + r \int_0^t M(x) e^{-rx} dx)}{dt} \\
+
+\end{align}
+
+$$ M^{'}(t) = r $$
+$$ M(t) = rt $$
+
+Laplace transform of F is $\Phi$ as follows:
+
+$$ \Phi(s) = \int_0^\infty e^{-s t} r e^{- r t} dt = \int_0^\infty rne^{-(s + r) t} dt = \frac{r}{r + s}, \quad s \in (0, \infty)
+$$
+
+Laplace transform of M is $\Gamma\ as follows, i.e. the transfromation of function $t \to rt$
+$$ \Gamma(s) = \frac{\Phi(s)}{1 - \Phi(s)} = \frac{r}{s}, \quad s \in (0, \infty) $$
+
+
+According to the joint distribution of current and remaining lives and $M(t) = rt$ for $t \in [0, \infty)$
+
+Ff $x \in [0,t],\ y \in [0, \infty)$
+\begin{align}
+
+\mathbb{P} (C_t \ge x, R_t \ge y) 
+&= e^{-r (t + y)} + \int_0^{t - x} e^{-r(t + y  - s)} r ds \\
+&= e^{-r x} e^{-r y} \\
+&= \mathbb{P} (C_t \geq x) \mathbb{P} (R_t \geq y) \\
+
+\end{align}
+
+Ff $y = 0$, we have $\mathbb{P} (C_t \geq x) = e^{-rx}$ for $x \in [0,t]$ \
+Ff $x = 0$, we have $\mathbb{P} (R_t \geq y) = e^{-ry}$ for $y \in [0, \infty)$ \
+
+Here we see $C_t$ and $R_t$ are independent.
+
+
